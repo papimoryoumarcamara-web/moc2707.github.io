@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mory Oumar Camara · No recule</title>
+<meta name="description" content="Mory Oumar Camara – Étudiant à BEM Conakry. Création de cartes de visite NFC et de menus NFC pour restaurants.">
+<meta name="theme-color" content="#070404">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070404; --ink:#f7efe8; --muted:#bfaea2; --fire:#ff5a1f; --gold:#ffb43a; --red:#e3261b;
+    --glass:rgba(10,8,10,.66); --line:rgba(92,200,255,.24);
+    --accent:#5cc8ff; --accent-2:#a6e6ff;
+    --ice:linear-gradient(100deg,#e9f9ff 0%,#a6e6ff 28%,#5cc8ff 58%,#2a9df4 82%,#a6e6ff 100%);
+    --display:"Bebas Neue", Impact, "Arial Narrow", "Haettenschweiler", sans-serif;
+    --flame:linear-gradient(100deg,#ffe08a 0%,#ffb43a 25%,#ff5a1f 55%,#e3261b 80%,#ffb43a 100%);
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg);color-scheme:dark;-webkit-tap-highlight-color:transparent}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
+    font:16px/1.5 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  svg{display:block}
+
+  #fire{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse 120% 90% at 50% 25%,transparent 45%,rgba(0,0,0,.8) 100%)}
+
+  main{position:relative;z-index:2;max-width:480px;margin:0 auto;
+    padding:env(safe-area-inset-top,0px) 16px calc(36px + env(safe-area-inset-bottom,0px))}
+
+  /* ---------- HERO : la voiture sort des flammes ---------- */
+  .hero{position:relative;height:clamp(230px,44vh,380px);display:flex;align-items:flex-end;justify-content:center}
+  .car{position:relative;width:min(100%,440px);transform-origin:50% 85%;
+    animation:emerge 2.4s cubic-bezier(.16,.84,.3,1) .3s both}
+  .car-inner{animation:idle 3.4s ease-in-out 2.9s infinite}
+  .car svg, .car img{width:100%;height:auto}
+  .car img{border-radius:18px;
+    -webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 55%,#000 55%,transparent 100%);
+            mask-image:radial-gradient(ellipse 70% 70% at 50% 55%,#000 55%,transparent 100%)}
+  .lights{opacity:.35;animation:lights 2.6s ease-out .3s both}
+  .bloom{opacity:0;animation:bloom 2.6s ease-out .3s both, bloomIdle 2.2s ease-in-out 3s infinite}
+  @keyframes emerge{
+    0%{transform:translateY(22%) scale(.3);filter:brightness(4) blur(8px) saturate(0);opacity:0}
+    18%{opacity:1}
+    68%{transform:translateY(-3%) scale(1.08);filter:brightness(1.3) blur(0) saturate(1)}
+    84%{transform:translateY(1%) scale(.98)}
+    100%{transform:none;filter:none;opacity:1}
+  }
+  @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  @keyframes lights{0%,55%{opacity:.25}62%{opacity:1}68%{opacity:.3}74%,100%{opacity:1}}
+  @keyframes bloom{0%,55%{opacity:0}62%{opacity:1}68%{opacity:.15}74%{opacity:.9}100%{opacity:.55}}
+  @keyframes bloomIdle{0%,100%{opacity:.55}50%{opacity:.75}}
+  body.shake .hero{animation:shake .45s linear}
+  @keyframes shake{
+    0%,100%{transform:none}15%{transform:translate(-5px,2px)}30%{transform:translate(5px,-2px)}
+    45%{transform:translate(-4px,1px)}60%{transform:translate(3px,-1px)}80%{transform:translate(-1px,0)}
+  }
+
+  /* ---------- CARTE PROFIL ---------- */
+  .glass{background:var(--glass);border:1px solid var(--line);border-radius:24px;
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    box-shadow:0 20px 60px -20px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,200,150,.08)}
+  .profile{position:relative;margin-top:6px;padding:26px 20px 22px;text-align:center}
+  .avatar{width:88px;height:88px;margin:-70px auto 12px;border-radius:50%;padding:3px;position:relative;
+    background:conic-gradient(from 0deg,#a6e6ff,#5cc8ff,#ff5a1f,#ffb43a,#2a9df4,#a6e6ff);animation:spin 6s linear infinite;
+    box-shadow:0 0 30px rgba(92,200,255,.45)}
+  .avatar span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:#120806;
+    font:400 34px/1 var(--display);letter-spacing:.04em;animation:spin 6s linear infinite reverse}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  h1{margin:0;font:400 46px/.92 var(--display);letter-spacing:.02em;text-transform:uppercase}
+  h1 b{font-weight:400;background:var(--ice);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;
+    color:transparent;animation:burn 4s linear infinite}
+  @keyframes burn{to{background-position:200% 0}}
+  .motto{display:inline-flex;align-items:center;gap:10px;margin:14px 0 6px;font:400 22px/1 var(--display);
+    letter-spacing:.28em;text-transform:uppercase;font-style:italic;color:var(--accent-2);
+    text-shadow:0 0 18px rgba(92,200,255,.8)}
+  .motto::before,.motto::after{content:"";width:26px;height:2px;background:linear-gradient(90deg,transparent,var(--accent))}
+  .motto::after{transform:scaleX(-1)}
+  .role{margin:0;color:var(--muted);font-size:14.5px}
+  .role strong{color:var(--ink);font-weight:600}
+
+  .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 12px}
+  .tile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px 12px;border-radius:16px;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:13px;font-weight:600;
+    transition:transform .15s, background .2s, border-color .2s}
+  .tile svg{width:26px;height:26px;color:var(--accent)}
+  .tile:active{transform:scale(.95)}
+  .tile:hover{background:rgba(92,200,255,.12);border-color:var(--line)}
+  .actions.social{margin:0}
+
+  .btn-fire{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+    padding:16px 18px;border-radius:16px;font-weight:700;font-size:16px;color:#03131f;
+    background:linear-gradient(135deg,#8fdcff,#5cc8ff 50%,#2a9df4);
+    box-shadow:0 10px 30px -8px rgba(92,200,255,.7);transition:transform .15s}
+  .btn-fire svg{width:22px;height:22px}
+  .btn-fire:active{transform:scale(.97)}
+  .btn-fire::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);
+    transform:translateX(-100%);animation:shine 3.5s ease-in-out 3s infinite}
+  @keyframes shine{0%{transform:translateX(-100%)}35%,100%{transform:translateX(100%)}}
+
+  /* ---------- SECTIONS ---------- */
+  section.block{margin-top:16px;padding:22px 18px}
+  h2{margin:0 0 14px;font:400 26px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--ice)}
+  .service{display:flex;gap:14px;align-items:flex-start;padding:14px;border-radius:16px;background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.07)}
+  .service + .service{margin-top:10px}
+  .service .ico{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:14px;
+    background:linear-gradient(135deg,rgba(92,200,255,.22),rgba(42,157,244,.08));border:1px solid var(--line);color:var(--accent)}
+  .service .ico svg{width:24px;height:24px}
+  .service h3{margin:0 0 3px;font-size:16px}
+  .service p{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
+  .cta{margin-top:16px}
+
+  .rows a, .rows div{display:flex;align-items:center;gap:14px;padding:13px 4px;border-bottom:1px solid rgba(255,255,255,.07)}
+  .rows > :last-child{border-bottom:0}
+  .rows svg{flex:none;width:20px;height:20px;color:var(--accent)}
+  .rows small{display:block;color:var(--muted);font-size:12px;line-height:1.2}
+  .rows span{font-weight:600;font-size:15px;word-break:break-word}
+  .rows .chev{margin-left:auto;width:16px;height:16px;color:var(--muted)}
+
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:13px}
+  footer b{font:400 18px/1 var(--display);letter-spacing:.25em;color:var(--accent-2);display:block;margin-bottom:6px;
+    text-shadow:0 0 14px rgba(92,200,255,.6)}
+
+  .reveal{animation:up .8s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,1.8s)}
+  @keyframes up{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+  .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;
+    z-index:5;padding:10px 16px;border-radius:12px;background:#1b0d09;border:1px solid var(--line);font-size:14px;
+    transition:.3s;pointer-events:none}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important}
+  }
+</style>
+</head>
+<body>
+<canvas id="fire" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<main>
+  <!-- ================= VOITURE ================= -->
+  <div class="hero">
+    <div class="car" id="car">
+      <div class="car-inner">
+        <!-- Si un fichier bmw.jpg (ou bmw.png détouré) est placé dans le dossier, il remplace le dessin -->
+        <img id="carPhoto" src="bmw.jpg" alt="BMW" hidden
+             onload="this.hidden=false;var s=document.getElementById('carSvg');if(s)s.remove()"
+             onerror="this.remove()">
+        <svg id="carSvg" viewBox="0 0 600 300" role="img" aria-label="Berline sportive noire qui sort des flammes">
+          <defs>
+            <linearGradient id="gBody" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#4a4a52"/><stop offset=".35" stop-color="#1c1c22"/><stop offset="1" stop-color="#050506"/>
+            </linearGradient>
+            <linearGradient id="gRefl" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#ff5a1f" stop-opacity=".6"/><stop offset=".55" stop-color="#ff5a1f" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="gGlass" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2e3642"/><stop offset=".6" stop-color="#0b0e13"/><stop offset="1" stop-color="#2a120a"/>
+            </linearGradient>
+            <linearGradient id="gChrome" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#e6e6ea"/><stop offset=".5" stop-color="#7c7c86"/><stop offset="1" stop-color="#c9c9d0"/>
+            </linearGradient>
+            <radialGradient id="gLamp">
+              <stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#cfe9ff"/><stop offset="1" stop-color="#5fb4ff" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="gBloom">
+              <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".25" stop-color="#d6efff" stop-opacity=".55"/>
+              <stop offset="1" stop-color="#7cc4ff" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="fGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <ellipse cx="300" cy="284" rx="270" ry="14" fill="#000" opacity=".75"/>
+          <!-- pneus -->
+          <rect x="76" y="226" width="76" height="58" rx="12" fill="#060606"/>
+          <rect x="448" y="226" width="76" height="58" rx="12" fill="#060606"/>
+          <!-- habitacle -->
+          <path d="M210 46 Q300 33 390 46 L452 126 L148 126 Z" fill="#0a0a0d"/>
+          <path d="M219 55 Q300 44 381 55 L433 121 L167 121 Z" fill="url(#gGlass)"/>
+          <path d="M238 60 L268 58 L214 119 L188 119 Z" fill="#fff" opacity=".07"/>
+          <!-- rétroviseurs -->
+          <path d="M150 108 L120 103 Q110 106 112 117 L148 123 Z" fill="url(#gBody)"/>
+          <path d="M450 108 L480 103 Q490 106 488 117 L452 123 Z" fill="url(#gBody)"/>
+          <!-- carrosserie -->
+          <path d="M148 122 L452 122 Q514 126 534 160 L543 214 Q544 243 518 249 L82 249 Q56 243 57 214 L66 160 Q86 126 148 122 Z" fill="url(#gBody)"/>
+          <path d="M148 122 L452 122 Q514 126 534 160 L543 214 Q544 243 518 249 L82 249 Q56 243 57 214 L66 160 Q86 126 148 122 Z" fill="url(#gRefl)"/>
+          <!-- lignes du capot -->
+          <path d="M200 127 Q300 119 400 127" stroke="#6a6a74" stroke-width="1.5" fill="none" opacity=".7"/>
+          <path d="M238 129 L252 148 M362 129 L348 148" stroke="#55555e" stroke-width="1.5" fill="none" opacity=".8"/>
+          <!-- blocs optiques -->
+          <path d="M90 152 L216 160 L205 185 L107 181 Q92 173 90 152 Z" fill="#090b10" stroke="#30333b" stroke-width="1.5"/>
+          <path d="M510 152 L384 160 L395 185 L493 181 Q508 173 510 152 Z" fill="#090b10" stroke="#30333b" stroke-width="1.5"/>
+          <g class="lights" filter="url(#fGlow)">
+            <path d="M102 159 L204 166" stroke="#e8f6ff" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M498 159 L396 166" stroke="#e8f6ff" stroke-width="4.5" stroke-linecap="round"/>
+            <circle cx="136" cy="173" r="8" fill="url(#gLamp)"/><circle cx="172" cy="175" r="8" fill="url(#gLamp)"/>
+            <circle cx="464" cy="173" r="8" fill="url(#gLamp)"/><circle cx="428" cy="175" r="8" fill="url(#gLamp)"/>
+          </g>
+          <!-- double calandre -->
+          <rect x="248" y="148" width="46" height="48" rx="13" fill="#040405" stroke="url(#gChrome)" stroke-width="3"/>
+          <rect x="306" y="148" width="46" height="48" rx="13" fill="#040405" stroke="url(#gChrome)" stroke-width="3"/>
+          <g stroke="#2c2c33" stroke-width="2">
+            <path d="M259 154 V190 M268 152 V192 M277 152 V192 M286 154 V190"/>
+            <path d="M317 154 V190 M326 152 V192 M335 152 V192 M344 154 V190"/>
+          </g>
+          <!-- bouclier avant -->
+          <path d="M80 200 L134 206 L150 237 L90 237 Q79 222 80 200 Z" fill="#050506" stroke="#25252b"/>
+          <path d="M520 200 L466 206 L450 237 L510 237 Q521 222 520 200 Z" fill="#050506" stroke="#25252b"/>
+          <path d="M156 204 L444 204 L424 238 L176 238 Z" fill="#060607" stroke="#25252b"/>
+          <!-- plaque -->
+          <rect x="250" y="211" width="100" height="20" rx="3" fill="#ececec"/>
+          <text x="300" y="226" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" font-weight="700" letter-spacing="1.5" fill="#111">NO RECULE</text>
+          <!-- halos des phares -->
+          <g class="bloom">
+            <circle cx="150" cy="170" r="60" fill="url(#gBloom)"/>
+            <circle cx="450" cy="170" r="60" fill="url(#gBloom)"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PROFIL ================= -->
+  <section class="profile glass reveal" style="--d:1.9s">
+    <div class="avatar"><span>MOC</span></div>
+    <h1>Mory Oumar <b>Camara</b></h1>
+    <div class="motto">No recule</div>
+    <p class="role"><strong>Étudiant à BEM Conakry</strong><br>Créateur de cartes NFC</p>
+
+    <div class="actions">
+      <a class="tile" href="tel:+224626067105" aria-label="Appeler Mory">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+        Appeler
+      </a>
+      <a class="tile" href="https://wa.me/224626067105" aria-label="Écrire sur WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
+        WhatsApp
+      </a>
+      <a class="tile" href="mailto:siteetdomaine@gmail.com" aria-label="Envoyer un email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        Email
+      </a>
+    </div>
+
+    <a class="btn-fire" href="contact.vcf" id="addContact">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1"/><path d="M19 8v6M16 11h6"/></svg>
+      Ajouter à mes contacts
+    </a>
+  </section>
+
+  <!-- ================= RÉSEAUX ================= -->
+  <section class="block glass reveal" style="--d:2.05s">
+    <h2>Réseaux</h2>
+    <div class="actions social">
+      <a class="tile" href="https://www.snapchat.com/add/lilmoc.7" aria-label="Snapchat lilmoc.7">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 0 5 2.2 5 5.2v2.3l1.8-.5c.6 0 .8.8.2 1.1l-2.1 1c.6 1.8 2 3 3.8 3.6-.4.8-1.6 1-2.6 1.1-.2.6-.3 1.2-.6 1.4-.9-.2-2.1-.4-3.4.5-1 .7-1.4 1.3-2.1 1.3s-1.1-.6-2.1-1.3c-1.3-.9-2.5-.7-3.4-.5-.3-.2-.4-.8-.6-1.4-1-.1-2.2-.3-2.6-1.1 1.8-.6 3.2-1.8 3.8-3.6l-2.1-1c-.6-.3-.4-1.1.2-1.1l1.8.5V8.2C7 5.2 9 3 12 3Z"/></svg>
+        Snapchat
+      </a>
+      <a class="tile" href="https://www.tiktok.com/@lil_moc2707" aria-label="TikTok @lil_moc2707">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.4 2.6 2.2 4.4 5 4.6"/></svg>
+        TikTok
+      </a>
+      <a class="tile" href="https://www.linkedin.com/search/results/people/?keywords=Mory%20Oumar%20CAMARA" aria-label="LinkedIn Mory Oumar CAMARA">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V16M8 7.6v.1M12 16v-5.5M12 13c0-1.6 1-2.6 2.3-2.6S16 11.3 16 13v3"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= SERVICES ================= -->
+  <section class="block glass reveal" style="--d:2.2s">
+    <h2>Mes services</h2>
+    <div class="service">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M14 9.5a3.5 3.5 0 0 1 0 5M16.5 8a6 6 0 0 1 0 8"/><path d="M6 10h4M6 13.5h3"/></svg></div>
+      <div>
+        <h3>Cartes de visite NFC</h3>
+        <p>On approche le téléphone de la carte, et toutes vos infos s'affichent : appel, WhatsApp, réseaux, contact enregistré en un geste.</p>
+      </div>
+    </div>
+    <div class="service">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v8a2 2 0 0 1-2 2v8M3 3v6a2 2 0 0 0 2 2M5 3v6"/><path d="M17 21V3c-2.5 1-4 4-4 8v2h4"/></svg></div>
+      <div>
+        <h3>Menus NFC pour restaurants</h3>
+        <p>Vos clients approchent leur téléphone de la table et le menu s'ouvre. Fini les menus papier abîmés, les prix se mettent à jour en un instant.</p>
+      </div>
+    </div>
+    <a class="btn-fire cta" href="https://wa.me/224626067105?text=Bonjour%20Mory%2C%20je%20veux%20commander%20une%20carte%20NFC%20%21">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 3 4 4.5 4 8.5a4 4 0 0 1-8 0c0-1.5.6-2.6 1.5-3.5.2 1.6 1 2.5 2 2.5 0-3 .5-5 .5-7.5"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+      Commander ma carte NFC
+    </a>
+  </section>
+
+  <!-- ================= COORDONNÉES ================= -->
+  <section class="block glass rows reveal" style="--d:2.35s">
+    <h2>Coordonnées</h2>
+    <a href="tel:+224626067105">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+      <div style="all:unset"><small>Téléphone & WhatsApp</small><span>+224 626 06 71 05</span></div>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+    </a>
+    <a href="mailto:siteetdomaine@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      <div style="all:unset"><small>Email</small><span>siteetdomaine@gmail.com</span></div>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+    </a>
+    <div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10 12 5l9 5-9 5-9-5Z"/><path d="M7 12.5V17c3 2 7 2 10 0v-4.5"/></svg>
+      <div style="all:unset"><small>École</small><span>BEM Conakry, Guinée</span></div>
+    </div>
+  </section>
+
+  <footer class="reveal" style="--d:2.6s">
+    <b>No recule</b>
+    Approchez · Connectez · Avancez
+  </footer>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ============ FEU ANIMÉ ============ */
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cv = document.getElementById('fire'), ctx = cv.getContext('2d');
+  var S = 0.5, W = 0, H = 0;               // rendu en demi-résolution : léger pour les téléphones
+  function resize(){ W = cv.width = Math.max(1, Math.round(innerWidth*S)); H = cv.height = Math.max(1, Math.round(innerHeight*S)); }
+  resize(); addEventListener('resize', resize);
+
+  // Sprites de flamme pré-calculés (du blanc-jaune au rouge sombre)
+  var STEPS = 24, SPR = 64, sprites = [];
+  var stops = [[0,[255,250,225]],[.12,[255,214,110]],[.3,[255,150,40]],[.55,[235,70,20]],[.8,[140,25,10]],[1,[40,8,4]]];
+  function col(t){
+    for (var i=1;i<stops.length;i++){ if (t<=stops[i][0]){ var a=stops[i-1], b=stops[i], k=(t-a[0])/(b[0]-a[0]);
+      return a[1].map(function(v,j){ return Math.round(v+(b[1][j]-v)*k); }); } }
+    return stops[stops.length-1][1];
+  }
+  for (var i=0;i<STEPS;i++){
+    var c=document.createElement('canvas'); c.width=c.height=SPR; var g=c.getContext('2d'); var rgb=col(i/(STEPS-1)).join(',');
+    var grd=g.createRadialGradient(SPR/2,SPR/2,0,SPR/2,SPR/2,SPR/2);
+    grd.addColorStop(0,'rgba('+rgb+',1)'); grd.addColorStop(.4,'rgba('+rgb+',.5)'); grd.addColorStop(1,'rgba('+rgb+',0)');
+    g.fillStyle=grd; g.fillRect(0,0,SPR,SPR); sprites.push(c);
+  }
+
+  var P = [], E = [];
+  var MAX = reduce ? 140 : (innerWidth < 500 ? 300 : 460);
+  function flame(x, y, pow, spread, vx){
+    if (P.length >= MAX) return;
+    P.push({ x:x+(Math.random()-.5)*spread, y:y, vx:(vx||0)+(Math.random()-.5)*.6, vy:-(.7+Math.random()*1.5)*pow,
+             life:0, max:(26+Math.random()*30)*(.7+pow*.3), r:(14+Math.random()*20)*pow });
+  }
+  function ember(x, y, fast){
+    if (E.length > 90) return;
+    var sp = fast ? 3+Math.random()*5 : .4+Math.random()*1.2, a = fast ? Math.random()*Math.PI*2 : -Math.PI/2;
+    E.push({ x:x, y:y, vx:Math.cos(a)*sp*(fast?1:.3)+(Math.random()-.5)*.4, vy:fast?Math.sin(a)*sp-2:-sp,
+             life:0, max:80+Math.random()*120, s:1.5+Math.random()*2.5, ph:Math.random()*6 });
+  }
+
+  var car = document.getElementById('car');
+  var t0 = performance.now(), last = t0;
+  window.fireBurst = function(){
+    var r = car.getBoundingClientRect(), cx = r.left+r.width/2, cy = r.top+r.height*.7;
+    for (var i=0;i<90;i++){ var a=Math.random()*Math.PI*2, s=1+Math.random()*3;
+      flame(cx+Math.cos(a)*r.width*.35, cy+Math.sin(a)*r.height*.25, 2.2+Math.random(), 30, Math.cos(a)*s); }
+    for (var j=0;j<45;j++) ember(cx+(Math.random()-.5)*r.width*.6, cy, true);
+  };
+
+  function frame(now){
+    var dt = Math.min(3, (now-last)/16.67); last = now;
+    var el = (now - t0)/1000;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0,0,W,H);
+
+    // Lueur de chaleur en bas
+    var fl = .8 + Math.sin(now/90)*.08 + Math.random()*.08;
+    var hg = ctx.createLinearGradient(0,H,0,H*.5);
+    hg.addColorStop(0,'rgba(255,70,20,'+(.28*fl)+')'); hg.addColorStop(1,'rgba(255,70,20,0)');
+    ctx.fillStyle = hg; ctx.fillRect(0,H*.5,W,H*.5);
+
+    // Foyer derrière la voiture
+    var r = car.getBoundingClientRect();
+    var visible = r.bottom > -50 && r.top < innerHeight + 50;
+    var heat = reduce ? .8 : Math.max(.95, 2.3 - el*.35);   // très fort au début, puis brûle en continu
+    if (visible){
+      var gx = (r.left+r.width/2)*S, gy = (r.top+r.height*.75)*S, gr = r.width*.75*S;
+      var rg = ctx.createRadialGradient(gx,gy,0,gx,gy,gr);
+      rg.addColorStop(0,'rgba(255,120,30,'+(.35*fl)+')'); rg.addColorStop(1,'rgba(255,60,20,0)');
+      ctx.fillStyle = rg; ctx.fillRect(gx-gr,gy-gr,gr*2,gr*2);
+      var n = (reduce?2:6)*dt;
+      for (var k=0;k<n;k++){
+        var u = Math.random();
+        flame(r.left + r.width*(.06+u*.88), r.top + r.height*(.55+Math.random()*.35), heat*(.8+Math.sin(u*Math.PI)*.5), 12);
+      }
+      if (Math.random() < .25*dt) ember(r.left + Math.random()*r.width, r.top + r.height*.6, false);
+    }
+    // Flammes au bas de l'écran
+    var nb = (reduce?1:3)*dt*(innerWidth/400);
+    for (var b=0;b<nb;b++) flame(Math.random()*innerWidth, innerHeight+12, .75+Math.random()*.4, 0);
+    if (Math.random() < .15*dt) ember(Math.random()*innerWidth, innerHeight, false);
+
+    // Dessin additif
+    ctx.globalCompositeOperation = 'lighter';
+    for (var p=P.length-1;p>=0;p--){
+      var q = P[p];
+      q.life += dt; var t = q.life/q.max;
+      if (t >= 1){ P.splice(p,1); continue; }
+      q.vy -= .045*dt; q.vx += (Math.random()-.5)*.18*dt; q.vx *= .98;
+      q.x += q.vx*dt; q.y += q.vy*dt;
+      var size = q.r*(.55 + Math.sin(t*Math.PI)*.6)*S*2;
+      ctx.globalAlpha = Math.pow(1-t,1.3)*.85;
+      ctx.drawImage(sprites[Math.min(STEPS-1,(t*(STEPS-1))|0)], q.x*S-size/2, q.y*S-size/2, size, size);
+    }
+    for (var e=E.length-1;e>=0;e--){
+      var m = E[e];
+      m.life += dt; var te = m.life/m.max;
+      if (te >= 1 || m.y < -20){ E.splice(e,1); continue; }
+      m.vy += (m.vy < -.3 ? .03 : -.01)*dt; m.vx *= .985;
+      m.x += (m.vx + Math.sin(m.life*.08+m.ph)*.35)*dt; m.y += m.vy*dt;
+      ctx.globalAlpha = (1-te)*(.6+Math.random()*.4);
+      var s2 = m.s*S*2.2;
+      ctx.drawImage(sprites[2], m.x*S-s2, m.y*S-s2, s2*2, s2*2);
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // Arrivée de la voiture : explosion de flammes + secousse
+  setTimeout(function(){
+    window.fireBurst();
+    if (!reduce){ document.body.classList.add('shake'); setTimeout(function(){ document.body.classList.remove('shake'); }, 500); }
+  }, reduce ? 50 : 1950);
+})();
+
+/* ============ HORS LIGNE ============ */
+if ('serviceWorker' in navigator && location.protocol !== 'file:'){
+  addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
+</script>
+</body>
+</html>

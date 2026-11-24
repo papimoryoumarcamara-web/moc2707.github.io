@@ -1,0 +1,12 @@
+{
+  "name": "Mory Oumar Camara · No recule",
+  "short_name": "Mory Camara",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070404",
+  "theme_color": "#070404",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
